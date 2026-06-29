@@ -1,0 +1,41 @@
+---
+import Base from "../../layouts/Base.astro";
+import SubscribeBox from "../../components/SubscribeBox.astro";
+import { getCollection } from "astro:content";
+
+const notes = (await getCollection("investingNotes"))
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title="Investing Notes" description="Markets, theses, post-mortems.">
+  <h1>Investing Notes</h1>
+  <p class="lead">Markets, theses, and post-mortems. Selected notes also go out by email.</p>
+
+  <SubscribeBox />
+
+  {notes.length === 0 && <p>Nothing published yet.</p>}
+
+  <ul class="note-list">
+    {
+      notes.map((n) => (
+        <li>
+          <a class="note-title" href={`/investing-notes/${n.id}`}>
+            {n.data.title}
+          </a>
+          <div class="note-meta">
+            {n.data.date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+            {n.data.tags.length > 0 && (
+              <span> · {n.data.tags.map((t) => <span class="tag">{t}</span>)}</span>
+            )}
+            {n.data.description && <div>{n.data.description}</div>}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

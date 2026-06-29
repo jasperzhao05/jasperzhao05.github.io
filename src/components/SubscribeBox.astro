@@ -1,0 +1,24 @@
+---
+import { SITE } from "../config";
+---
+
+<div class="subscribe">
+  {
+    SITE.substackEmbed ? (
+      <iframe
+        src={SITE.substackEmbed}
+        height="150"
+        title="Subscribe via Substack"
+        scrolling="no"
+      />
+    ) : (
+      <p style="margin:0">
+        📬 Subscribe to get new investing notes by email on{" "}
+        <a href={SITE.substack} target="_blank" rel="noopener">
+          Substack
+        </a>
+        .
+      </p>
+    )
+  }
+</div>

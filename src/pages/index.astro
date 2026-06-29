@@ -1,0 +1,31 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../config";
+---
+
+<Base description="Personal site of Samuel Zng — ML research and investing notes.">
+  <h1>{SITE.name}</h1>
+  <p class="lead">{SITE.tagline}</p>
+
+  <p>
+    Hi — I'm a CS / ML student working on efficient multimodal models
+    (vision-token compression and where it breaks). Alongside research I write
+    investing notes. This site is where both live.
+  </p>
+
+  <h2>What's here</h2>
+  <ul>
+    <li><a href="/research">Research</a> — what I'm working on and why.</li>
+    <li><a href="/projects">Projects</a> — things I've built.</li>
+    <li><a href="/research-notes">Research Notes</a> — technical write-ups.</li>
+    <li><a href="/investing-notes">Investing Notes</a> — markets, theses, post-mortems.</li>
+    <li><a href="/cv">CV</a> — the one-page version.</li>
+  </ul>
+
+  <h2>Elsewhere</h2>
+  <p>
+    <a href={SITE.github} target="_blank" rel="noopener">GitHub</a> ·
+    <a href={SITE.substack} target="_blank" rel="noopener">Substack</a> ·
+    <a href={`mailto:${SITE.email}`}>Email</a>
+  </p>
+</Base>
