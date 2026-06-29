@@ -1,12 +1,12 @@
 ---
 title: "First note: how I'll use this space"
 date: 2026-06-29
-description: "What these investing notes are and aren't."
+description: "What these notes are and aren't."
 tags: ["meta"]
 draft: false
 ---
 
-This is a placeholder note so the section renders. Delete it once you publish a real one.
+A placeholder so the section renders — delete it once you publish a real note.
 
 ## What this is
 

@@ -5,10 +5,7 @@ import SubscribeBox from "../components/SubscribeBox.astro";
 import { SITE } from "../config";
 import { getCollection } from "astro:content";
 
-const research = (await getCollection("researchNotes"))
-  .filter((n) => !n.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const investing = (await getCollection("investingNotes"))
+const notes = (await getCollection("notes"))
   .filter((n) => !n.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
@@ -17,15 +14,29 @@ const fmt = (d: Date) =>
 
 // Edit by hand, newest first.
 const news = [
-  { date: "Jun 2026", text: "Launched this site for research and investing notes." },
+  { date: "Jun 2026", text: "Launched this site." },
+  { date: "2026", text: "Working toward a workshop submission on visual-token compression." },
 ];
 
+// Curated — edit freely.
 const projects = [
   {
-    name: "LLM-Queue-Sim",
-    desc: "Discrete-event simulation of queueing for LLM serving — request latency and throughput under different scheduling policies.",
-    href: "https://github.com/jasperzhao05/llm-queue-sim",
-    tags: ["Python", "simulation", "LLM serving"],
+    name: "glassbox",
+    desc: "Build modern AI from scratch — LLM internals, RL post-training, and vision, one transparent mechanism per file.",
+    href: "https://github.com/jasperzhao05/glassbox",
+    tags: [["Python", "tag-blue"], ["from scratch", "tag-purple"]],
+  },
+  {
+    name: "frame2frame",
+    desc: "Head-pose estimation from video — Euler angles (yaw/pitch/roll) with FIR signal smoothing.",
+    href: "https://github.com/jasperzhao05/frame2frame-virtual-screen",
+    tags: [["Python", "tag-blue"], ["computer vision", "tag-green"]],
+  },
+  {
+    name: "ItineralTrace",
+    desc: "A multimodal AI travel-planning agent with voice, vision, and memory.",
+    href: "https://github.com/jasperzhao05/ItineralTrace-travel-agent",
+    tags: [["agents", "tag-amber"], ["multimodal", "tag-purple"]],
   },
 ];
 ---
@@ -36,29 +47,23 @@ const projects = [
 
     <div class="content">
       <section id="about">
-        <h2 class="sec"><span class="sec-n">01</span> About</h2>
-        <p>
-          I'm working on <strong>efficient multimodal models</strong>. I'm
-          interested in vision–language models under tight compute budgets —
-          specifically which capabilities degrade, and <em>how</em>, when the
-          visual tokens a model gets to see are compressed.
-        </p>
-        <p>
-          Most compression work reports that average accuracy holds up; I care
-          about what the average hides — whether failure looks like dropped
-          information or confidently wrong information. Alongside research I keep
-          a set of investing notes.
+        <p class="bio">
+          I'm a <em>BA in Artificial Intelligence</em> student at CUHK working on
+          efficient multimodal models. I study which capabilities of
+          vision–language models degrade, and <em>how</em>, when the visual
+          tokens they see are compressed. I also write a set of notes on markets.
         </p>
       </section>
 
       {
         news.length > 0 && (
           <section id="news">
-            <h2 class="sec"><span class="sec-n">02</span> News</h2>
+            <h2 class="sec"><span class="dot dot-blue" /> News</h2>
             <ul class="news">
               {news.map((n) => (
                 <li>
-                  <span class="news-date">{n.date}</span> {n.text}
+                  <span class="pill">{n.date}</span>
+                  <span>{n.text}</span>
                 </li>
               ))}
             </ul>
@@ -67,28 +72,19 @@ const projects = [
       }
 
       <section id="research">
-        <h2 class="sec"><span class="sec-n">03</span> Research</h2>
-        <p>I work on visual-token compression for VLMs and its failure modes:</p>
-        <ul>
-          <li>Compression methods: merging, pruning, pooling.</li>
+        <h2 class="sec"><span class="dot dot-purple" /> Research</h2>
+        <ul class="rlist">
+          <li>Visual-token compression for VLMs — merging, pruning, pooling.</li>
           <li>Capability-specific degradation under a fixed token budget.</li>
           <li>Omission vs. hallucination — and what causes which.</li>
         </ul>
-        <p>
-          Full overview on the <a href="/research">research page</a>; write-ups
-          in <a href="/research-notes">research notes</a>.
-        </p>
-      </section>
-
-      <section id="publications">
-        <h2 class="sec"><span class="sec-n">04</span> Publications</h2>
-        <p style="color:var(--muted)">
-          None yet — work in progress. Preprints and papers will be listed here.
+        <p style="margin:0.6rem 0 0;font-size:0.9rem">
+          More on the <a href="/research">research page</a>.
         </p>
       </section>
 
       <section id="projects">
-        <h2 class="sec"><span class="sec-n">05</span> Projects</h2>
+        <h2 class="sec"><span class="dot dot-green" /> Projects</h2>
         <div class="cards">
           {
             projects.map((p) => (
@@ -96,8 +92,8 @@ const projects = [
                 <div class="card-title">{p.name} ↗</div>
                 <p class="card-desc">{p.desc}</p>
                 <div class="card-tags">
-                  {p.tags.map((t) => (
-                    <span class="tag">{t}</span>
+                  {p.tags.map(([t, cls]) => (
+                    <span class={`tag ${cls}`}>{t}</span>
                   ))}
                 </div>
               </a>
@@ -106,45 +102,26 @@ const projects = [
         </div>
       </section>
 
-      <section id="writing">
-        <h2 class="sec"><span class="sec-n">06</span> Writing</h2>
-        {research.length === 0 && <p style="color:var(--muted)">Nothing published yet.</p>}
-        <ul class="note-list">
-          {
-            research.slice(0, 4).map((n) => (
-              <li>
-                <a class="note-title" href={`/research-notes/${n.id}`}>
-                  {n.data.title}
-                </a>
-                <div class="note-meta">
-                  {fmt(n.data.date)}
-                  {n.data.description && <div>{n.data.description}</div>}
-                </div>
-              </li>
-            ))
-          }
-        </ul>
-        <p><a href="/research-notes">All research notes →</a></p>
-      </section>
-
-      <section id="investing">
-        <h2 class="sec"><span class="sec-n">07</span> Investing</h2>
-        <p>Markets, theses, and post-mortems. Selected notes also go out by email.</p>
+      <section id="notes">
+        <h2 class="sec"><span class="dot dot-amber" /> {SITE.notesLabel}</h2>
+        <p style="margin:0 0 0.6rem;font-size:0.92rem">
+          Notes on markets — theses, position rationale, and post-mortems.
+        </p>
         <SubscribeBox />
-        {investing.length === 0 && <p style="color:var(--muted)">Nothing published yet.</p>}
-        <ul class="note-list">
+        {notes.length === 0 && <p style="color:var(--muted)">Nothing published yet.</p>}
+        <ul class="nlist">
           {
-            investing.slice(0, 4).map((n) => (
+            notes.slice(0, 5).map((n) => (
               <li>
-                <a class="note-title" href={`/investing-notes/${n.id}`}>
+                <a class="n-title" href={`/notes/${n.id}`}>
                   {n.data.title}
                 </a>
-                <div class="note-meta">{fmt(n.data.date)}</div>
+                <span class="n-date">{fmt(n.data.date)}</span>
               </li>
             ))
           }
         </ul>
-        <p><a href="/investing-notes">All investing notes →</a></p>
+        <a class="more" href="/notes">All {SITE.notesLabel.toLowerCase()} →</a>
       </section>
     </div>
   </div>

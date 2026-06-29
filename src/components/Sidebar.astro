@@ -6,7 +6,6 @@ const initials = SITE.name
   .map((w) => w[0])
   .join("");
 
-// Build the contact links, skipping any that are blank in config.
 const links = [
   { label: "Email", href: `mailto:${SITE.email}`, icon: "mail" },
   { label: "CV", href: "/cv", icon: "doc" },
@@ -20,10 +19,8 @@ const sections = [
   ["about", "About"],
   ["news", "News"],
   ["research", "Research"],
-  ["publications", "Publications"],
   ["projects", "Projects"],
-  ["writing", "Writing"],
-  ["investing", "Investing"],
+  ["notes", SITE.notesLabel],
 ];
 ---
 
@@ -32,12 +29,9 @@ const sections = [
        <img class="headshot" src="/headshot.jpg" alt={SITE.name} /> -->
   <div class="headshot headshot--initials">{initials}</div>
   <h1 class="sb-name">{SITE.name}</h1>
-  <p class="sb-role">{SITE.role}{SITE.affiliation && <> · {SITE.affiliation}</>}</p>
+  <p class="sb-role">{SITE.role}</p>
+  {SITE.affiliation && <p class="sb-aff">{SITE.affiliation}</p>}
   <p class="sb-tag">{SITE.tagline}</p>
-
-  <nav class="sb-nav">
-    {sections.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
-  </nav>
 
   <div class="sb-links">
     {
@@ -72,4 +66,8 @@ const sections = [
       ))
     }
   </div>
+
+  <nav class="sb-nav">
+    {sections.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+  </nav>
 </aside>

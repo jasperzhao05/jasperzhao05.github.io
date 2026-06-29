@@ -1,25 +1,44 @@
 ---
 import Base from "../layouts/Base.astro";
+
+const projects = [
+  {
+    name: "glassbox",
+    desc: "Build modern AI from scratch — LLM internals, RL post-training, and vision, one transparent mechanism per file.",
+    href: "https://github.com/jasperzhao05/glassbox",
+  },
+  {
+    name: "frame2frame",
+    desc: "Head-pose estimation from video — Euler angles (yaw/pitch/roll) with FIR signal smoothing.",
+    href: "https://github.com/jasperzhao05/frame2frame-virtual-screen",
+  },
+  {
+    name: "ItineralTrace",
+    desc: "A multimodal AI travel-planning agent with voice, vision, and memory.",
+    href: "https://github.com/jasperzhao05/ItineralTrace-travel-agent",
+  },
+];
 ---
 
 <Base title="Projects" description="Selected projects and code.">
+  <p style="margin-bottom:1.5rem"><a href="/">← Home</a></p>
   <h1>Projects</h1>
 
   <ul class="note-list">
-    <li>
-      <div class="note-title">LLM-Queue-Sim</div>
-      <div class="note-meta">
-        Discrete-event simulation of queueing for LLM serving — modeling
-        request latency and throughput under different scheduling policies.
-        <div>
+    {
+      projects.map((p) => (
+        <li>
           <a
-            href="https://github.com/jasperzhao05/llm-queue-sim"
+            class="note-title"
+            href={p.href}
             target="_blank"
-            rel="noopener">code</a
+            rel="noopener"
           >
-        </div>
-      </div>
-    </li>
-    <!-- Add more entries in the same shape. -->
+            {p.name} ↗
+          </a>
+          <div class="note-meta">{p.desc}</div>
+        </li>
+      ))
+    }
   </ul>
 </Base>
