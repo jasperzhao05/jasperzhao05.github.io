@@ -2,7 +2,10 @@
 
 Personal site built with [Astro](https://astro.build), deployed to GitHub Pages.
 
-## Local development
+> This README is maintainer notes — only needed when *I* edit the site.
+> Visitors just go to https://jasperzhao05.github.io; they never run any of this.
+
+## Local development (editing the site)
 
 ```bash
 npm install      # first time only

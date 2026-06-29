@@ -2,24 +2,35 @@
 import Base from "../layouts/Base.astro";
 ---
 
-<Base title="Research" description="Research interests and current work.">
+<Base
+  title="Research"
+  description="Research on efficient multimodal models and their failure modes."
+>
   <h1>Research</h1>
-  <p class="lead">Efficient multimodal models, and where efficiency breaks.</p>
 
-  <h2>Current</h2>
   <p>
-    <!-- TODO: replace with a short paragraph on FaceTok / the workshop line. -->
-    Add a short description of your current project here.
+    I work on <strong>efficient multimodal models</strong> — vision–language
+    models that have to run under a fixed compute or token budget. A lot of
+    recent work compresses the visual tokens a model sees (merging, pruning,
+    pooling) and reports that average benchmark accuracy holds up. I'm
+    interested in the part that average accuracy hides: <em>which</em>
+    capabilities break first under compression, and whether the failure looks
+    like dropped information or confidently wrong information.
   </p>
 
   <h2>Interests</h2>
   <ul>
-    <li>Vision-token compression for VLMs.</li>
-    <li>Failure modes under a fixed token budget.</li>
+    <li>Visual-token compression for VLMs (merging, pruning, pooling).</li>
+    <li>Capability-specific degradation under a fixed token budget.</li>
+    <li>Failure modes: omission vs. hallucination, and what causes which.</li>
   </ul>
 
-  <h2>Writing</h2>
+  <h2>Selected work</h2>
   <p>
-    Technical write-ups live in <a href="/research-notes">Research Notes</a>.
+    <!-- Add real entries as work matures. Avoid posting unpublished method
+         details before submission. -->
+    Write-ups and experiments appear in
+    <a href="/research-notes">research notes</a>. Code is on
+    <a href="/projects">projects</a>.
   </p>
 </Base>

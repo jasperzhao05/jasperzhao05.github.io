@@ -1,26 +1,48 @@
 ---
 import Base from "../layouts/Base.astro";
+import { SITE } from "../config";
 ---
 
-<Base title="CV" description="Curriculum vitae.">
+<Base title="CV" description={`Curriculum vitae of ${SITE.name}.`}>
   <h1>CV</h1>
-  <p>
-    <!-- Option A: drop a PDF into /public/cv.pdf and link it below. -->
-    <a href="/cv.pdf">Download PDF</a>
+  <p class="links-row">
+    <a href={`mailto:${SITE.email}`}>Email</a>
+    <a href={SITE.github} target="_blank" rel="noopener">GitHub</a>
+    <!-- Drop a PDF at public/cv.pdf and this link works. -->
+    <a href="/cv.pdf">PDF</a>
   </p>
 
   <h2>Education</h2>
-  <ul>
-    <li>TODO</li>
+  <ul class="note-list">
+    <li>
+      <div class="note-title">B.Sc. in Computer Science <!-- TODO: degree --></div>
+      <div class="note-meta">
+        <!-- TODO: university · expected graduation · honors / GPA if you want -->
+        University · 20XX–20XX
+      </div>
+    </li>
   </ul>
 
-  <h2>Experience</h2>
-  <ul>
-    <li>TODO</li>
+  <h2>Research experience</h2>
+  <ul class="note-list">
+    <li>
+      <div class="note-title">Efficient multimodal models <!-- TODO --></div>
+      <div class="note-meta">
+        <!-- TODO: advisor / lab / dates -->
+        Compression and failure-mode analysis for vision–language models.
+      </div>
+    </li>
   </ul>
 
-  <h2>Publications</h2>
-  <ul>
-    <li>TODO</li>
-  </ul>
+  <h2>Publications &amp; preprints</h2>
+  <p style="color:var(--muted)">
+    None yet — work in progress. List them here as
+    <em>Authors. Title. Venue, Year.</em> with links once available.
+  </p>
+
+  <h2>Selected projects</h2>
+  <p>See <a href="/projects">projects</a>.</p>
+
+  <h2>Skills</h2>
+  <p><!-- TODO -->Python, PyTorch, &hellip;</p>
 </Base>

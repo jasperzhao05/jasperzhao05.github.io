@@ -1,31 +1,109 @@
 ---
 import Base from "../layouts/Base.astro";
 import { SITE } from "../config";
+import { getCollection } from "astro:content";
+
+// Most recent writing across both note sections, for the homepage preview.
+const research = await getCollection("researchNotes");
+const investing = await getCollection("investingNotes");
+const recent = [...research, ...investing]
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4)
+  .map((n) => ({
+    ...n,
+    href:
+      (research.includes(n as any) ? "/research-notes/" : "/investing-notes/") +
+      n.id,
+  }));
+
+// Edit these by hand. Newest first.
+const news = [
+  { date: "Jun 2026", text: "Launched this site for research and investing notes." },
+  // { date: "Mon 2026", text: "Paper / talk / award goes here." },
+];
+
+const initials = SITE.name
+  .split(" ")
+  .map((w) => w[0])
+  .join("");
 ---
 
-<Base description="Personal site of Samuel Zng — ML research and investing notes.">
-  <h1>{SITE.name}</h1>
-  <p class="lead">{SITE.tagline}</p>
+<Base description={`${SITE.name} — ${SITE.tagline}`}>
+  <header class="intro">
+    <!-- To use a photo: drop public/headshot.jpg and replace this div with
+         <img class="headshot" src="/headshot.jpg" alt={SITE.name} /> -->
+    <div class="headshot headshot--initials">{initials}</div>
+    <div>
+      <h1 style="margin-bottom:0.15rem">{SITE.name}</h1>
+      <p style="margin:0;color:var(--muted)">
+        {SITE.role}{SITE.affiliation && <> · {SITE.affiliation}</>}
+      </p>
+    </div>
+  </header>
 
   <p>
-    Hi — I'm a CS / ML student working on efficient multimodal models
-    (vision-token compression and where it breaks). Alongside research I write
-    investing notes. This site is where both live.
+    I'm working on efficient multimodal models. I'm interested in
+    vision–language models under tight compute budgets — specifically which
+    capabilities degrade, and <em>how</em>, when the visual tokens a model gets
+    to see are compressed. Alongside research I keep a set of investing notes.
   </p>
 
-  <h2>What's here</h2>
-  <ul>
-    <li><a href="/research">Research</a> — what I'm working on and why.</li>
-    <li><a href="/projects">Projects</a> — things I've built.</li>
-    <li><a href="/research-notes">Research Notes</a> — technical write-ups.</li>
-    <li><a href="/investing-notes">Investing Notes</a> — markets, theses, post-mortems.</li>
-    <li><a href="/cv">CV</a> — the one-page version.</li>
-  </ul>
-
-  <h2>Elsewhere</h2>
-  <p>
-    <a href={SITE.github} target="_blank" rel="noopener">GitHub</a> ·
-    <a href={SITE.substack} target="_blank" rel="noopener">Substack</a> ·
+  <p class="links-row">
     <a href={`mailto:${SITE.email}`}>Email</a>
+    <a href="/cv">CV</a>
+    <a href={SITE.github} target="_blank" rel="noopener">GitHub</a>
+    {SITE.scholar && <a href={SITE.scholar} target="_blank" rel="noopener">Scholar</a>}
+    {SITE.twitter && <a href={SITE.twitter} target="_blank" rel="noopener">Twitter</a>}
+    <a href={SITE.substack} target="_blank" rel="noopener">Substack</a>
   </p>
+
+  {
+    news.length > 0 && (
+      <section>
+        <h2>News</h2>
+        <ul class="news">
+          {news.map((n) => (
+            <li>
+              <span class="news-date">{n.date}</span> {n.text}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section>
+    <h2>Research</h2>
+    <p>
+      A short overview of what I work on and why lives on the
+      <a href="/research">research page</a>. Technical write-ups go in
+      <a href="/research-notes">research notes</a>.
+    </p>
+  </section>
+
+  {
+    recent.length > 0 && (
+      <section>
+        <h2>Recent writing</h2>
+        <ul class="note-list">
+          {recent.map((n) => (
+            <li>
+              <a class="note-title" href={n.href}>
+                {n.data.title}
+              </a>
+              <div class="note-meta">
+                {n.data.date.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+                {n.data.description && <div>{n.data.description}</div>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </Base>

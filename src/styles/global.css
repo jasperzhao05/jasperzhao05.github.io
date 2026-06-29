@@ -173,6 +173,51 @@ pre code {
   font-size: 1.05rem;
 }
 
+/* ---- homepage intro ---- */
+.intro {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.headshot {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.headshot--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--code-bg);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+}
+.links-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.95rem;
+}
+.news {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+.news li {
+  padding: 0.35rem 0;
+}
+.news-date {
+  display: inline-block;
+  min-width: 5.5rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .subscribe {
   border: 1px solid var(--border);
   border-radius: 10px;

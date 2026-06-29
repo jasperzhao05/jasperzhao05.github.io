@@ -2,16 +2,24 @@
 import Base from "../layouts/Base.astro";
 ---
 
-<Base title="Projects" description="Things I've built.">
+<Base title="Projects" description="Selected projects and code.">
   <h1>Projects</h1>
 
   <ul class="note-list">
     <li>
-      <div class="note-title">Project name</div>
+      <div class="note-title">LLM-Queue-Sim</div>
       <div class="note-meta">
-        <!-- TODO: one-line description, link to repo / demo -->
-        Short description. <a href="#">repo</a>
+        Discrete-event simulation of queueing for LLM serving — modeling
+        request latency and throughput under different scheduling policies.
+        <div>
+          <a
+            href="https://github.com/jasperzhao05/llm-queue-sim"
+            target="_blank"
+            rel="noopener">code</a
+          >
+        </div>
       </div>
     </li>
+    <!-- Add more entries in the same shape. -->
   </ul>
 </Base>
