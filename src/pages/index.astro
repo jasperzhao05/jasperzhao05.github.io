@@ -1,109 +1,151 @@
 ---
 import Base from "../layouts/Base.astro";
+import Sidebar from "../components/Sidebar.astro";
+import SubscribeBox from "../components/SubscribeBox.astro";
 import { SITE } from "../config";
 import { getCollection } from "astro:content";
 
-// Most recent writing across both note sections, for the homepage preview.
-const research = await getCollection("researchNotes");
-const investing = await getCollection("investingNotes");
-const recent = [...research, ...investing]
+const research = (await getCollection("researchNotes"))
   .filter((n) => !n.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4)
-  .map((n) => ({
-    ...n,
-    href:
-      (research.includes(n as any) ? "/research-notes/" : "/investing-notes/") +
-      n.id,
-  }));
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const investing = (await getCollection("investingNotes"))
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-// Edit these by hand. Newest first.
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
+// Edit by hand, newest first.
 const news = [
   { date: "Jun 2026", text: "Launched this site for research and investing notes." },
-  // { date: "Mon 2026", text: "Paper / talk / award goes here." },
 ];
 
-const initials = SITE.name
-  .split(" ")
-  .map((w) => w[0])
-  .join("");
+const projects = [
+  {
+    name: "LLM-Queue-Sim",
+    desc: "Discrete-event simulation of queueing for LLM serving — request latency and throughput under different scheduling policies.",
+    href: "https://github.com/jasperzhao05/llm-queue-sim",
+    tags: ["Python", "simulation", "LLM serving"],
+  },
+];
 ---
 
-<Base description={`${SITE.name} — ${SITE.tagline}`}>
-  <header class="intro">
-    <!-- To use a photo: drop public/headshot.jpg and replace this div with
-         <img class="headshot" src="/headshot.jpg" alt={SITE.name} /> -->
-    <div class="headshot headshot--initials">{initials}</div>
-    <div>
-      <h1 style="margin-bottom:0.15rem">{SITE.name}</h1>
-      <p style="margin:0;color:var(--muted)">
-        {SITE.role}{SITE.affiliation && <> · {SITE.affiliation}</>}
-      </p>
-    </div>
-  </header>
+<Base wide showNav={false} description={`${SITE.name} — ${SITE.tagline}`}>
+  <div class="layout">
+    <Sidebar />
 
-  <p>
-    I'm working on efficient multimodal models. I'm interested in
-    vision–language models under tight compute budgets — specifically which
-    capabilities degrade, and <em>how</em>, when the visual tokens a model gets
-    to see are compressed. Alongside research I keep a set of investing notes.
-  </p>
-
-  <p class="links-row">
-    <a href={`mailto:${SITE.email}`}>Email</a>
-    <a href="/cv">CV</a>
-    <a href={SITE.github} target="_blank" rel="noopener">GitHub</a>
-    {SITE.scholar && <a href={SITE.scholar} target="_blank" rel="noopener">Scholar</a>}
-    {SITE.twitter && <a href={SITE.twitter} target="_blank" rel="noopener">Twitter</a>}
-    <a href={SITE.substack} target="_blank" rel="noopener">Substack</a>
-  </p>
-
-  {
-    news.length > 0 && (
-      <section>
-        <h2>News</h2>
-        <ul class="news">
-          {news.map((n) => (
-            <li>
-              <span class="news-date">{n.date}</span> {n.text}
-            </li>
-          ))}
-        </ul>
+    <div class="content">
+      <section id="about">
+        <h2 class="sec"><span class="sec-n">01</span> About</h2>
+        <p>
+          I'm working on <strong>efficient multimodal models</strong>. I'm
+          interested in vision–language models under tight compute budgets —
+          specifically which capabilities degrade, and <em>how</em>, when the
+          visual tokens a model gets to see are compressed.
+        </p>
+        <p>
+          Most compression work reports that average accuracy holds up; I care
+          about what the average hides — whether failure looks like dropped
+          information or confidently wrong information. Alongside research I keep
+          a set of investing notes.
+        </p>
       </section>
-    )
-  }
 
-  <section>
-    <h2>Research</h2>
-    <p>
-      A short overview of what I work on and why lives on the
-      <a href="/research">research page</a>. Technical write-ups go in
-      <a href="/research-notes">research notes</a>.
-    </p>
-  </section>
+      {
+        news.length > 0 && (
+          <section id="news">
+            <h2 class="sec"><span class="sec-n">02</span> News</h2>
+            <ul class="news">
+              {news.map((n) => (
+                <li>
+                  <span class="news-date">{n.date}</span> {n.text}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
-  {
-    recent.length > 0 && (
-      <section>
-        <h2>Recent writing</h2>
-        <ul class="note-list">
-          {recent.map((n) => (
-            <li>
-              <a class="note-title" href={n.href}>
-                {n.data.title}
+      <section id="research">
+        <h2 class="sec"><span class="sec-n">03</span> Research</h2>
+        <p>I work on visual-token compression for VLMs and its failure modes:</p>
+        <ul>
+          <li>Compression methods: merging, pruning, pooling.</li>
+          <li>Capability-specific degradation under a fixed token budget.</li>
+          <li>Omission vs. hallucination — and what causes which.</li>
+        </ul>
+        <p>
+          Full overview on the <a href="/research">research page</a>; write-ups
+          in <a href="/research-notes">research notes</a>.
+        </p>
+      </section>
+
+      <section id="publications">
+        <h2 class="sec"><span class="sec-n">04</span> Publications</h2>
+        <p style="color:var(--muted)">
+          None yet — work in progress. Preprints and papers will be listed here.
+        </p>
+      </section>
+
+      <section id="projects">
+        <h2 class="sec"><span class="sec-n">05</span> Projects</h2>
+        <div class="cards">
+          {
+            projects.map((p) => (
+              <a class="card" href={p.href} target="_blank" rel="noopener">
+                <div class="card-title">{p.name} ↗</div>
+                <p class="card-desc">{p.desc}</p>
+                <div class="card-tags">
+                  {p.tags.map((t) => (
+                    <span class="tag">{t}</span>
+                  ))}
+                </div>
               </a>
-              <div class="note-meta">
-                {n.data.date.toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-                {n.data.description && <div>{n.data.description}</div>}
-              </div>
-            </li>
-          ))}
-        </ul>
+            ))
+          }
+        </div>
       </section>
-    )
-  }
+
+      <section id="writing">
+        <h2 class="sec"><span class="sec-n">06</span> Writing</h2>
+        {research.length === 0 && <p style="color:var(--muted)">Nothing published yet.</p>}
+        <ul class="note-list">
+          {
+            research.slice(0, 4).map((n) => (
+              <li>
+                <a class="note-title" href={`/research-notes/${n.id}`}>
+                  {n.data.title}
+                </a>
+                <div class="note-meta">
+                  {fmt(n.data.date)}
+                  {n.data.description && <div>{n.data.description}</div>}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        <p><a href="/research-notes">All research notes →</a></p>
+      </section>
+
+      <section id="investing">
+        <h2 class="sec"><span class="sec-n">07</span> Investing</h2>
+        <p>Markets, theses, and post-mortems. Selected notes also go out by email.</p>
+        <SubscribeBox />
+        {investing.length === 0 && <p style="color:var(--muted)">Nothing published yet.</p>}
+        <ul class="note-list">
+          {
+            investing.slice(0, 4).map((n) => (
+              <li>
+                <a class="note-title" href={`/investing-notes/${n.id}`}>
+                  {n.data.title}
+                </a>
+                <div class="note-meta">{fmt(n.data.date)}</div>
+              </li>
+            ))
+          }
+        </ul>
+        <p><a href="/investing-notes">All investing notes →</a></p>
+      </section>
+    </div>
+  </div>
 </Base>

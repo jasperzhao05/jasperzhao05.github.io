@@ -7,8 +7,10 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  wide?: boolean;
+  showNav?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, wide = false, showNav = true } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : SITE.name;
 ---
 
@@ -23,8 +25,8 @@ const fullTitle = title ? `${title} · ${SITE.name}` : SITE.name;
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
-    <Nav />
-    <main>
+    {showNav && <Nav />}
+    <main class={wide ? "wide" : ""}>
       <slot />
     </main>
     <Footer />
